@@ -1,0 +1,18 @@
+function summonDebugMob(coords)
+    for i = 1, #coords do
+        local x = coords[i].x
+        local y = coords[i].y
+        local z = coords[i].z
+        commands.exec("summon Zombie " .. x .. " " .. y .. " " .. z .. " {NoAI:1b,PersistenceRequired:1b,Glowing:1,LeftHanded:0,CanPickUpLoot:0b,Invulnerable:1}")
+        sleep(0.1)
+    end
+end
+
+function killAllDebugMob()
+    commands.exec("kill @e[type=Zombie]")
+end
+
+function sayCurrentPosition()
+    x, y, z = commands.getBlockPosition()
+    commands.exec("computer is in position " .. x .. " " .. y .. " " .. z)
+end

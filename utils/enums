@@ -1,0 +1,32 @@
+-- get all const of the program
+return {
+    Zones = {
+        Rooftop = 0,
+        Tower = 1,
+        Prison = 2,
+        Mine = 3,
+        Warehouse = 4,
+        Bandithouse = 5,
+        Church = 6,
+        Forest = 7
+    },
+    Mechants = {
+        Sulfateuse = 0,
+        Terroriste = 1,
+        Sorcier = 2,
+        Sniper = 3,
+        Pompe = 4,
+        Ninja = 5,
+        Mage = 6,
+        GigaGolem = 7,
+        CroMignon = 8,
+        Bombardier = 9
+    },
+    Commands = {
+        help = 0,
+        list = 1,
+        debug = 2,
+        set = 3,
+        generate = 4
+    }
+}

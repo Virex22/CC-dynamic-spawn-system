@@ -1,0 +1,15 @@
+local commands = dofile("/utils/enums").Commands
+
+local function showHelp(allowedCommands)
+    print("Liste des commandes autorisées:")
+    for key, value in pairs(allowedCommands) do
+        print("  " .. key)
+    end
+    print("Pour plus d'informations sur une commande, tapez <commande> help")
+end
+
+if commands ~= nil then
+    showHelp(commands)
+else
+    print("Erreur: Aucune commande n'est autorisée")
+end

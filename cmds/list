@@ -1,0 +1,42 @@
+local enums = dofile("/utils/enums")
+
+local function listMobTypes()
+    print("Liste des types de mobs:")
+    for key, value in pairs(enums.Mechants) do
+        print("  " .. key)
+    end
+end
+
+local function listZones()
+    print("Liste des zones:")
+    for key, value in pairs(enums.Zones) do
+        print("  " .. key)
+    end
+end
+
+local function showListHelp()
+    print("Utilisation: list <type|zone|help>")
+    print("  list type: Affiche la liste des types de mobs")
+    print("  list zone: Affiche la liste des zones")
+    print("  list help: Affiche l'aide pour la commande list")
+end
+
+-- Récupérer l'environnement local
+local env = _ENV
+
+local subCommand = env.args[2]
+
+if subCommand == nil then
+    print("Utilisation: list <type|zone|help>")
+elseif subCommand == "type" or subCommand == "mobType" then
+    listMobTypes()
+elseif subCommand == "zone" then
+    listZones()
+elseif subCommand == "help" then
+    showListHelp()
+else
+    term.setTextColor(colors.red)
+    print("Erreur: " .. subCommand .. " n'est pas une sous-commande valide.")
+    term.setTextColor(colors.white)
+    print("Utilisation: list <type|zone|help>")
+end

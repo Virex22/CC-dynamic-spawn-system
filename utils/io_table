@@ -1,0 +1,41 @@
+-- Fonction pour écrire un tableau dans un fichier
+local function writeTableToFile(filename, array)
+    local file = fs.open(filename, "w")
+    if file then
+        file.write(textutils.serialize(array))
+        file.close()
+    else
+        print("Error opening file:", filename)
+    end
+end
+
+local function readTableFromFile(filename, autoCreate)
+    autoCreate = autoCreate or false
+    if fs.exists(filename) then
+        local file = fs.open(filename, "r")
+        if file then
+            local content = file.readAll()
+            file.close()
+            local array = textutils.unserialize(content)
+            if type(array) == "table" then
+                return array
+            else
+                print("File does not contain a valid table:", filename)
+            end
+        else
+            print("Error opening file:", filename)
+        end
+    else
+        if autoCreate then
+            writeTableToFile(filename, {})
+            return {}
+        end
+        print("File does not exist:", filename)
+    end
+    return nil
+end
+
+return {
+    writeTableToFile = writeTableToFile,
+    readTableFromFile = readTableFromFile
+}

@@ -1,0 +1,36 @@
+os.loadAPI("utils/debug")
+isInArray = dofile("utils/global_helper").isInArray
+
+local commands = dofile("/utils/enums").Commands
+
+function showMenu()
+    term.clear()
+    term.setCursorPos(1, 1)
+    print("Bienvenue dans le programme de génération de map")
+    print("tapez help pour afficher la liste des commandes")
+end
+
+showMenu()
+while true do
+    write("> ")
+    local input = read()
+    local continue = false
+
+    local args = {}
+    for arg in string.gmatch(input, "%S+") do
+        table.insert(args, arg)
+    end
+
+    if args[1] == nil then
+        continue = true
+    else
+        if isInArray(commands, args[1], true) then
+            local env = {
+                args = args
+            }
+            os.run(env, "cmds/" .. string.lower(args[1]))
+        else
+            print("commande invalide")
+        end
+    end
+end

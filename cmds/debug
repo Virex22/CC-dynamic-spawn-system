@@ -1,0 +1,21 @@
+os.loadAPI("/utils/debug")
+os.loadAPI("/utils/dataprovider")
+local env = _ENV
+
+local subCommand = env.args[2]
+
+if subCommand == nil then
+    print("Utilisation: debug <spawn|kill|help>")
+elseif subCommand == "spawn" then
+    local coords = dataprovider.coordsNow()
+    debug.summonDebugMob(coords)
+elseif subCommand == "kill" then
+    debug.killAllDebugMob()
+elseif subCommand == "help" then
+    print("Utilisation: debug <spawn|kill|help>")
+else
+    term.setTextColor(colors.red)
+    print("Erreur: " .. subCommand .. " n'est pas une sous-commande valide.")
+    term.setTextColor(colors.white)
+    print("Utilisation: debug <spawn|kill|help>")
+end

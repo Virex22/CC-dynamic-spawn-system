@@ -1,0 +1,101 @@
+-- get a percentage of coords from a table of coords
+function filterPercentageOfCoords(coords, percentage)
+    local filteredCoords = {}
+    local totalCoords = #coords
+    local filteredCoordsCount = math.floor(totalCoords * percentage)
+    for i = 1, filteredCoordsCount do
+        local randomIndex = math.random(1, #coords)
+        table.insert(filteredCoords, coords[randomIndex])
+        table.remove(coords, randomIndex)
+    end
+    return filteredCoords
+end
+
+-- filter coords by distance from a center of a circle, if the coord isn't in the circle, it's not added to the result
+function filterCoordsByDistance(coords, centerOfCircle, radius)
+    local filteredCoords = {}
+    for i = 1, #coords do
+        local coord = coords[i]
+        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        if distance <= radius then
+            table.insert(filteredCoords, coord)
+        end
+    end
+    return filteredCoords
+end
+
+-- filter coords by distance from a center of a circle, get percentage of coords in function of the distance from the center
+function filterCoordsByDistanceSmooth(coords, centerOfCircle, radius, PercentageCenter, PercentageExtremity)
+    local filteredCoords = {}
+    for i = 1, #coords do
+        local coord = coords[i]
+        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        if distance <= radius then
+            local percentage = PercentageCenter + (PercentageExtremity - PercentageCenter) * (distance / radius)
+            if math.random() <= percentage then
+                table.insert(filteredCoords, coord)
+            end
+        end
+    end
+    return filteredCoords
+end
+
+-- filter by number of coords
+function filterCoordsByNumber(coords, number)
+    local filteredCoords = {}
+    for i = 1, number do
+        local randomIndex = math.random(1, #coords)
+        table.insert(filteredCoords, coords[randomIndex])
+        table.remove(coords, randomIndex)
+    end
+    return filteredCoords
+end
+
+-- filter by number of coords and make sure the coords is homogenous
+function filterCoordsByNumberHomogenous(coords, number)
+    local filteredCoords = {}
+    local coordsPerType = math.floor(number / #coords)
+    for i = 1, #coords do
+        local coordsForType = filterCoordsByNumber(coords[i], coordsPerType)
+        for j = 1, #coordsForType do
+            table.insert(filteredCoords, coordsForType[j])
+        end
+    end
+    local remainingCoords = number - #filteredCoords
+    if remainingCoords > 0 then
+        local coordsForType = filterCoordsByNumber(coords[1], remainingCoords)
+        for j = 1, #coordsForType do
+            table.insert(filteredCoords, coordsForType[j])
+        end
+    end
+    return filteredCoords
+end
+
+-- inverted circle coords, remove coords in a circle
+function filterCoordsByDistanceInverted(coords, centerOfCircle, radius)
+    local filteredCoords = {}
+    for i = 1, #coords do
+        local coord = coords[i]
+        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        if distance > radius then
+            table.insert(filteredCoords, coord)
+        end
+    end
+    return filteredCoords
+end
+
+-- filter coords by distance from a center of a circle, get percentage of coords in function of the distance from the center
+function filterCoordsByDistanceSmoothInverted(coords, centerOfCircle, radius, PercentageLessOnTheCircle, PercentageMoreOnTheCircle)
+    local filteredCoords = {}
+    for i = 1, #coords do
+        local coord = coords[i]
+        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        if distance > radius then
+            local percentage = PercentageLessOnTheCircle + (PercentageMoreOnTheCircle - PercentageLessOnTheCircle) * (distance / radius)
+            if math.random() <= percentage then
+                table.insert(filteredCoords, coord)
+            end
+        end
+    end
+    return filteredCoords
+end
