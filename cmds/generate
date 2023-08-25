@@ -1,0 +1,5 @@
+local store = dofile("/utils/store")
+
+local env = _ENV
+
+processGenerate = function(args)

@@ -1,0 +1,35 @@
+local store = dofile("/utils/store")
+
+local function validateValue(value)
+    isNumber = tonumber(value) ~= nil
+    if not isPercentage and not isNumber then
+        print("Invalid value:", value)
+        return false
+    end
+    return true
+end
+
+local function processFocusCommand(args)
+    if #args < 5 then
+        print("Usage: focus [x] [y] [z] [range]")
+        return
+    end
+
+    local coords = {
+        x = tonumber(args[2]),
+        y = tonumber(args[3]),
+        z = tonumber(args[4]),
+    }
+
+    local range = tonumber(args[5])
+
+    store.focusOption = {
+        coords = coords,
+        range = range
+    }
+    store.save()
+end
+
+local env = _ENV
+
+processSetCommand(env.args)

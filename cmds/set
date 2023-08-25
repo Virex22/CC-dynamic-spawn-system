@@ -1,8 +1,6 @@
 local enums = dofile("/utils/enums")
 local helper = dofile("/utils/global_helper")
-local ioTable = dofile("/utils/io_table")
-
-datafile = "/datas/setTemps.data"
+local store = dofile("/utils/store")
 
 local function validateValue(value)
     isPercentage = string.find(value, "%d+%%") ~= nil
@@ -14,23 +12,15 @@ local function validateValue(value)
     return true
 end
 
-local function addToDatafile(zone, value)
-    local table = ioTable.readTableFromFile(datafile, true)
-    if table == nil then
-        table = {}
-    end
-    table[zone] = value
-    ioTable.writeTableToFile(datafile, table)
-end
-
 local function processSetCommand(args)
-    if #args < 3 then
-        print("Usage: set [Zone] [PercentageValue / Count]")
+    if #args < 4 then
+        print("Usage: set [Zone] [PercentageValue / Count] ([TypeOfMob], default: terrorist)")
         return
     end
 
     local zone = args[2]
     local value = args[3]
+    local mob = args[4]
 
     if not helper.isInArray(enums.Zones, zone, true) then
         print("Invalid Zone:", zone)
@@ -41,7 +31,18 @@ local function processSetCommand(args)
         return
     end
 
-    addToDatafile(zone, value)
+    if mob ~= nil and helper.isInArray(enums.Mechants, mob, true) then
+        print("Invalid MobType:", zone)
+        return
+    elseif mob == nil then
+        mob = enums.Mechants.Terroriste
+    end
+
+    store.generateOption[zone] = {{
+        value = value,
+        mob = mob
+    }}
+    store.save()
 end
 
 local env = _ENV

@@ -1,0 +1,35 @@
+local ioTable = dofile("/utils/io_table")
+_datafile = "/datas/datas.data"
+
+local Store = {}
+
+Store.generateOption = {}
+Store.focusOption = {}
+
+Store.load = function(){
+    Store._loadGenerateOption()
+}
+
+Store._loadGenerateOption = function ()
+    local table = ioTable.readTableFromFile(datafile, true)
+    if table == nil then
+        table = {}
+    end
+    if table.generateOption == nil then
+        table.generateOption = {}
+    end
+    if table.focusOption == nil then
+        table.focusOption = {}
+    end
+    Store.generateOption = table.generateOption
+    Store.focusOption = table.focusOption
+end
+
+Store.save = function()
+    ioTable.writeTableToFile(datafile, {
+        generateOption = Store.generateOption
+        
+    })
+end
+
+return Store

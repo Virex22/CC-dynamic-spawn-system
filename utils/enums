@@ -27,6 +27,7 @@ return {
         list = 1,
         debug = 2,
         set = 3,
-        generate = 4
+        generate = 4,
+        focus = 5,
     }
 }
