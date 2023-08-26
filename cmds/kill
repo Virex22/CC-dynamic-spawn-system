@@ -1,0 +1,52 @@
+local enums = dofile("/utils/enums")
+local env = _ENV
+local spawnCoords = {
+    x = -640,
+    y = 32,
+    z = -289
+}
+local spawnRadius = 250
+
+local subCommand = env.args[2]
+
+local function processKillCommand(args)
+    if #args ~= 2 then
+        print("this command need 2 arguments")
+        print("Usage: kill [mobType | all]")
+        return
+    end
+
+    local mobType = args[2]
+
+    if mobType == "all" then
+        for key, value in pairs(enums.Mechants) do
+            commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                              spawnRadius .. ",name=" .. key .. "]")
+        end
+    else
+        commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                          spawnRadius .. ",name=" .. mobType .. "]")
+    end
+    sleep(0.2)
+    -- kill orbs
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                      spawnRadius .. ",type=XPOrb]")
+    -- kill item customnpcs:npcCoinWooden
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                       spawnRadius .. ",type=Item,name=item.item.npcCoinWooden]")
+    -- kill item customnpcs:npcCoinStone
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                       spawnRadius .. ",type=Item,name=item.item.npcCoinStone]")
+    -- kill item customnpcs:npcCoinIron
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                       spawnRadius .. ",type=Item,name=item.item.npcCoinIron]")
+    -- kill item customnpcs:npcCoinGold
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                       spawnRadius .. ",type=Item,name=item.item.npcCoinGold]")
+    -- kill item customnpcs:npcCoinDiamond
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                       spawnRadius .. ",type=Item,name=item.item.npcCoinDiamond]")
+
+end
+
+processKillCommand(env.args)

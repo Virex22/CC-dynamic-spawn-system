@@ -4,12 +4,20 @@ function summonDebugMob(coords)
         local y = coords[i].y
         local z = coords[i].z
         commands.exec("summon Zombie " .. x .. " " .. y .. " " .. z .. " {NoAI:1b,PersistenceRequired:1b,Glowing:1,LeftHanded:0,CanPickUpLoot:0b,Invulnerable:1}")
-        sleep(0.1)
+        sleep(0.01)
+        if i % 10 == 0 then
+            sleep(0.05)
+        end
     end
 end
 
 function killAllDebugMob()
     commands.exec("kill @e[type=Zombie]")
+    sleep(0.1)
+    commands.exec("/kill @e[type=XPOrb]")
+    sleep(0.1)
+    --rottent flesh
+    commands.exec("/kill @e[type=Item,name=item.item.rottenFlesh]")
 end
 
 function sayCurrentPosition()

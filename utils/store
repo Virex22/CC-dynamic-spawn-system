@@ -6,12 +6,12 @@ local Store = {}
 Store.generateOption = {}
 Store.focusOption = {}
 
-Store.load = function(){
+Store.__init__ = function()
     Store._loadGenerateOption()
-}
+end
 
-Store._loadGenerateOption = function ()
-    local table = ioTable.readTableFromFile(datafile, true)
+Store._loadGenerateOption = function()
+    local table = ioTable.readTableFromFile(_datafile, true)
     if table == nil then
         table = {}
     end
@@ -26,10 +26,38 @@ Store._loadGenerateOption = function ()
 end
 
 Store.save = function()
-    ioTable.writeTableToFile(datafile, {
-        generateOption = Store.generateOption
-        
+    ioTable.writeTableToFile(_datafile, {
+        generateOption = Store.generateOption,
+        focusOption = Store.focusOption
     })
 end
+
+Store.reset = function()
+    Store.generateOption = {}
+    Store.focusOption = {}
+    Store.save()
+end
+
+Store._getPosKey = function()
+    return "pos=" .. Store.focusOption.position.range .. "r" .. Store.focusOption.position.coords.x .. "x" .. Store.focusOption.position.coords.y .. "y" .. Store.focusOption.position.coords.z .. "z"
+end
+
+Store._getPowKey = function()
+    return "pow=" .. Store.focusOption.power.centerPercentage .. "c" .. Store.focusOption.power.rangeEndPercentage .. "r"
+end
+
+Store.getFocusKey = function()
+    if Store.focusOption.position == nil and Store.focusOption.power == nil then
+        return nil
+    elseif Store.focusOption.position ~= nil and Store.focusOption.power ~= nil then
+        return Store._getPosKey() .. "_" .. Store._getPowKey()
+    elseif Store.focusOption.position ~= nil then
+        return Store._getPosKey()
+    elseif Store.focusOption.power ~= nil then
+        return Store._getPowKey()
+    end
+end
+
+Store.__init__() -- lauch init on load
 
 return Store

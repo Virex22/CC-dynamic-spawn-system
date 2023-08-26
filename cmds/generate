@@ -1,5 +1,180 @@
 local store = dofile("/utils/store")
+local filter = dofile("/utils/coord_filter_helper")
+os.loadAPI("/utils/dataprovider")
 
 local env = _ENV
 
-processGenerate = function(args)
+local SpawningQueue = {}
+
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do
+        count = count + 1
+    end
+    return count
+end
+
+local function validateGenerateOption()
+    if store.generateOption == nil or tablelength(store.generateOption) == 0 then
+        print("No generate option found")
+        return false
+    end
+    return true
+end
+
+local function spawnOneMob(coords, mob)
+    commands.exec("/noppes clone spawn " .. mob .. " 1 0:" .. coords.x .. ',' .. coords.y .. ',' .. coords.z .. ',' ..
+                      " " .. mob)
+end
+function isPercentage(value)
+    return string
+end
+
+local function addToQueue(coords, mob)
+    for _, coord in pairs(coords) do
+        local key = coord.x .. "," .. coord.y .. "," .. coord.z
+        if SpawningQueue[key] == nil then
+            SpawningQueue[key] = {
+                coord = coord,
+                mob = mob
+            }
+        end
+    end
+end
+
+local function registerSpawn(zone, mob, value)
+    allCoords = dataprovider.getCoordsByZone(zone)
+    isPercentage = string.find(value, "%d+%%") ~= nil
+    if isPercentage then
+        local percentage = tonumber(string.sub(value, 1, string.len(value) - 1))
+        allCoords = filter.filterPercentageOfCoords(allCoords, percentage)
+    else
+        local number = tonumber(value)
+        allCoords = filter.filterCountOfCoords(allCoords, number)
+    end
+
+    addToQueue(allCoords, mob)
+    
+end
+
+local function registerPositionnedRegisteredSpawn(zone, mob, value, focusInfo)
+    allCoords = dataprovider.getCoordsByZone(zone)
+    isPercentage = string.find(value, "%d+%%") ~= nil
+    if isPercentage then
+        local percentage = tonumber(string.sub(value, 1, string.len(value) - 1))
+        allCoords = filter.filterCoordsByDistance(allCoords, focusInfo.position.coords,
+                                                    focusInfo.position.range)
+        allCoords = filter.filterPercentageOfCoords(allCoords, percentage)
+    else
+        local number = tonumber(value)
+        allCoords = filter.filterCoordsByDistance(allCoords, focusInfo.position.coords,
+                                                    focusInfo.position.range)
+        allCoords = filter.filterCountOfCoords(allCoords, number)
+    end
+
+    addToQueue(allCoords, mob)
+end
+
+local function registerPositionnedWithForceRegisteredSpawn(zone, mob, value, focusInfo)
+    allCoords = dataprovider.getCoordsByZone(zone)
+    isPercentage = string.find(value, "%d+%%") ~= nil
+    local centerPercentage = tonumber(string.sub(focusInfo.power.centerPercentage, 1,
+                                                        string.len(focusInfo.power.centerPercentage) - 1))
+    local rangeEndPercentage = tonumber(string.sub(focusInfo.power.rangeEndPercentage, 1,
+                                                        string.len(focusInfo.power.rangeEndPercentage) - 1))
+    
+    if isPercentage then
+        local percentage = tonumber(string.sub(value, 1, string.len(value) - 1))
+        allCoords = filter.filterCoordsByDistanceSmooth(allCoords, focusInfo.position.coords,
+                                                            focusInfo.position.range,
+                                                            centerPercentage,
+                                                            rangeEndPercentage)
+        allCoords = filter.filterPercentageOfCoords(allCoords, percentage)
+    else
+        local number = tonumber(value)
+        allCoords = filter.filterCoordsByDistanceSmooth(allCoords, focusInfo.position.coords,
+                                                            focusInfo.position.range,
+                                                            centerPercentage,
+                                                            rangeEndPercentage)
+        allCoords = filter.filterCountOfCoords(allCoords, number)
+    end
+
+    addToQueue(allCoords, mob)
+end
+
+local function spawnMobs()
+    count = tablelength(SpawningQueue)
+    waves = math.floor(count / 10) +1
+
+    print("Spawning " .. count .. " mobs in " .. waves .. " waves")
+    for i = 1, waves do
+        for j = 1, 10 do
+            local key, value = next(SpawningQueue)
+            if key == nil then
+                break
+            end
+            spawnOneMob(value.coord, value.mob)
+            SpawningQueue[key] = nil
+            sleep(0.01)
+        end
+        sleep(0.5)
+        print("wave" .. i .. "/" .. waves .. " spawned (" .. math.ceil((i / waves * 100)) .. "%)")
+    end
+end
+
+local function generate()
+    if not validateGenerateOption() then
+        return
+    end
+
+    local generateOption = store.generateOption
+
+    for focusKey, value in pairs(generateOption) do
+        if focusKey == "nofocus" then
+            for zone, mobs in pairs(value) do
+                for _, mob in pairs(mobs) do
+                    registerSpawn(zone, mob.mob, mob.value)
+                end
+            end
+        else
+            local havePower = value.focusInfo.power ~= nil
+            local havePosition = value.focusInfo.position ~= nil
+            if not havePower then
+                for zone, mobs in pairs(value) do
+                    if zone == "focusInfo" then
+                        break
+                    end
+                    for _, mob in pairs(mobs) do
+                        registerPositionnedRegisteredSpawn(zone, mob.mob, mob.value, value.focusInfo)
+                    end
+                end
+            elseif not havePosition then
+                print ("error : have power but not position")
+            else
+                for zone, mobs in pairs(value) do
+                    if zone == "focusInfo" then
+                        break
+                    end
+                    for _, mob in pairs(mobs) do
+                        registerPositionnedWithForceRegisteredSpawn(zone, mob.mob, mob.value, value.focusInfo)
+                    end
+                end
+            end
+        end
+    end
+    spawnMobs()
+end
+
+local function processGenerateCommand(args)
+    if #args > 1 then
+        print("no arg needed")
+        print("Usage: generate")
+        return
+    end
+
+    generate()
+
+    store.reset()
+end
+
+processGenerateCommand(env.args)

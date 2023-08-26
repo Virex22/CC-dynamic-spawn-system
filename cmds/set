@@ -12,8 +12,62 @@ local function validateValue(value)
     return true
 end
 
+
+function deepCopy(obj)
+    if type(obj) ~= "table" then
+        return obj
+    end
+    local res = {}
+    for k, v in pairs(obj) do
+        res[deepCopy(k)] = deepCopy(v)
+    end
+    return res
+end
+
+local function updateGenerateOption(value, mob, zone)
+    local focusKey = store.getFocusKey()
+    if focusKey == nil then
+        focusKey = "nofocus"
+    end
+
+    -- set focus if not exist
+    if not helper.isInArray(store.generateOption, focusKey, true) then
+        if focusKey == "nofocus" then
+            store.generateOption[focusKey] = {}
+        else
+            store.generateOption[focusKey] = {
+                focusInfo = deepCopy(store.focusOption)
+            }
+        end
+    end
+
+    -- set zone if not exist
+    if not helper.isInArray(store.generateOption[focusKey], zone, true) then
+        store.generateOption[focusKey][zone] = {}
+    end
+
+    -- set or update mob and value
+    local found = false
+    for k, v in pairs(store.generateOption[focusKey][zone]) do
+        if v.mob == mob then
+            v.value = value
+            found = true
+            break
+        end
+    end
+
+    if not found then
+        table.insert(store.generateOption[focusKey][zone], {
+            mob = mob,
+            value = value
+        })
+    end
+
+    store.save()
+end
+
 local function processSetCommand(args)
-    if #args < 4 then
+    if #args < 3 then
         print("Usage: set [Zone] [PercentageValue / Count] ([TypeOfMob], default: terrorist)")
         return
     end
@@ -31,18 +85,14 @@ local function processSetCommand(args)
         return
     end
 
-    if mob ~= nil and helper.isInArray(enums.Mechants, mob, true) then
-        print("Invalid MobType:", zone)
+    if mob ~= nil and not helper.isInArray(enums.Mechants, mob, true) then
+        print("Invalid MobType:", mob)
         return
     elseif mob == nil then
-        mob = enums.Mechants.Terroriste
+        mob = "Terroriste"
     end
 
-    store.generateOption[zone] = {{
-        value = value,
-        mob = mob
-    }}
-    store.save()
+    updateGenerateOption(value, mob, zone)
 end
 
 local env = _ENV

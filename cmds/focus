@@ -2,34 +2,103 @@ local store = dofile("/utils/store")
 
 local function validateValue(value)
     isNumber = tonumber(value) ~= nil
-    if not isPercentage and not isNumber then
+    if not isNumber then
         print("Invalid value:", value)
         return false
     end
     return true
 end
 
-local function processFocusCommand(args)
-    if #args < 5 then
-        print("Usage: focus [x] [y] [z] [range]")
+local function validatePercentage(value)
+    isPercentage = string.find(value, "%d+%%") ~= nil
+    if not isPercentage then
+        print("Invalid percentage value:", value)
+        return false
+    end
+    return true
+end
+
+local function help()
+    print("Usage:")
+    print("- focus position [x] [y] [z] [range]")
+    print("- focus power [centerPercent] [rangeEndPercent]")
+    print("- focus reset [position | power | all]")
+end
+
+local function processFocusPositionCommand(args)
+    if not validateValue(args[3]) or not validateValue(args[4]) or not validateValue(args[5]) or
+        not validateValue(args[6]) then
+        help()
         return
     end
 
     local coords = {
-        x = tonumber(args[2]),
-        y = tonumber(args[3]),
-        z = tonumber(args[4]),
+        x = tonumber(args[3]),
+        y = tonumber(args[4]),
+        z = tonumber(args[5])
     }
+    local range = tonumber(args[6])
 
-    local range = tonumber(args[5])
-
-    store.focusOption = {
+    store.focusOption.position = {
         coords = coords,
         range = range
     }
+
     store.save()
+end
+
+local function processFocusPowerCommand(args)
+    if not validatePercentage(args[3]) or not validatePercentage(args[4]) then
+        help()
+        return
+    end
+
+    local centerPercentage = args[3]
+    local rangeEndPercentage = args[4]
+
+    store.focusOption.power = {
+        centerPercentage = centerPercentage,
+        rangeEndPercentage = rangeEndPercentage
+    }
+
+    store.save()
+end
+
+local function processFocusResetCommand(args)
+    if args[3] == "position" then
+        store.focusOption.position = nil
+    elseif args[3] == "power" then
+        store.focusOption.power = nil
+    elseif args[3] == "all" then
+        store.focusOption.position = nil
+        store.focusOption.power = nil
+    else
+        print("Invalid reset option:", args[3])
+        help()
+        return
+    end
+
+    store.save()
+end
+
+local function processFocusCommand(args)
+    if #args ~= 6 and #args ~= 4 and #args ~= 3 then
+        help()
+        return
+    end
+
+    if args[2] == "position" then
+        processFocusPositionCommand(args)
+    elseif args[2] == "power" then
+        processFocusPowerCommand(args)
+    elseif args[2] == "reset" then
+        processFocusResetCommand(args)
+    else
+        print("Invalid subcommand:", args[2])
+        help()
+    end
 end
 
 local env = _ENV
 
-processSetCommand(env.args)
+processFocusCommand(env.args)

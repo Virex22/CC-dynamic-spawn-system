@@ -1,0 +1,86 @@
+local env = _ENV
+local store = dofile("/utils/store")
+
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do
+        count = count + 1
+    end
+    return count
+end
+
+local function processViewFocusPosition()
+    local coords = store.focusOption.position.coords
+    print("Un filtre est active sur la position : " .. coords.x .. "," .. coords.y .. "," .. coords.z)
+    print("Le rayon de ce filtre est de : " .. store.focusOption.position.range)
+end
+
+local function processViewFocusPower()
+    local centerPercentage = store.focusOption.power.centerPercentage
+    local rangeEndPercentage = store.focusOption.power.rangeEndPercentage
+    print("Un filtre est activer avec une répartition de " .. centerPercentage .. " au centre et " ..
+              rangeEndPercentage .. " a l'extremité")
+end
+
+local function processViewFocus()
+    print("Focus :")
+    
+    if store.focusOption.position ~= nil then
+        processViewFocusPosition()
+    end
+
+    if store.focusOption.power ~= nil then
+        processViewFocusPower()
+    end
+
+    print("--------------------")
+end
+
+local function processViewGenerate()
+    local generateOption = store.generateOption
+    print("Generate :")
+    if generateOption.nofocus ~= nil then
+        for zone, mobs in pairs(generateOption.nofocus) do
+            local str = "Dans " .. zone .. " les mobs "
+            for _, mob in pairs(mobs) do
+                str = str .. mob.mob .. "(" .. mob.value .. "),"
+            end
+            str = string.sub(str, 1, string.len(str) - 1)
+            print(str .. " vont spawn")
+        end
+    end
+
+    for key, value in pairs(generateOption) do
+        if key ~= "nofocus" then
+            local focus = generateOption[key].focusInfo
+            local coords = focus.position.coords
+            print("\r\nPour le focus a la position " .. coords.x .. "," .. coords.y .. "," .. coords.z .. ", avec un rayon de : " .. focus.position.range .. " et une répartition de " ..
+                      focus.power.centerPercentage .. " et " .. focus.power.rangeEndPercentage ..
+                      " a l'extremité :\r\n")
+            for zone, mobs in pairs(value) do
+                if zone ~= "focusInfo" then
+                    local str = "Dans " .. zone .. " les mobs "
+                    for _, mob in pairs(mobs) do
+                        str = str .. mob.mob .. "(" .. mob.value .. "),"
+                    end
+                    str = string.sub(str, 1, string.len(str) - 1)
+                    print(str .. " vont spawn")
+                end
+            end
+        end
+    end
+end
+
+local function processView()
+    if tablelength(store.focusOption) ~= 0 then
+        processViewFocus()
+    end
+
+    if tablelength(store.generateOption) ~= 0 then
+        processViewGenerate()
+    else 
+        print("Aucune configuration de génération n'est active")
+    end
+end
+
+processView()

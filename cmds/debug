@@ -7,7 +7,8 @@ local subCommand = env.args[2]
 if subCommand == nil then
     print("Utilisation: debug <spawn|kill|help>")
 elseif subCommand == "spawn" then
-    local coords = dataprovider.coordsNow()
+    local coords = dataprovider.getDebugCoords()
+    print("Spawning " .. #coords .. " mobs...")
     debug.summonDebugMob(coords)
 elseif subCommand == "kill" then
     debug.killAllDebugMob()

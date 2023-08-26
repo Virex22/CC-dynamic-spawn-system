@@ -13,7 +13,14 @@ local function isInArray(array, value, compareKeys)
     end
     return false
 end
-
+local function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do
+        count = count + 1
+    end
+    return count
+end
 return {
-    isInArray = isInArray
+    isInArray = isInArray,
+    tablelength = tablelength
 }

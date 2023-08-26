@@ -8,10 +8,13 @@ return {
         Warehouse = 4,
         Bandithouse = 5,
         Church = 6,
-        Forest = 7
+        Forest = 7,
+        Road = 8,
+        Inside = 9,
+        All = 10
     },
     Mechants = {
-        Sulfateuse = 0,
+        Sulfateur = 0,
         Terroriste = 1,
         Sorcier = 2,
         Sniper = 3,
@@ -19,7 +22,7 @@ return {
         Ninja = 5,
         Mage = 6,
         GigaGolem = 7,
-        CroMignon = 8,
+        ["Cro-Mignon"] = 8,
         Bombardier = 9
     },
     Commands = {
@@ -29,5 +32,9 @@ return {
         set = 3,
         generate = 4,
         focus = 5,
+        kill = 6,
+        reset = 7,
+        view = 8,
+        spawnchest = 9,
     }
 }

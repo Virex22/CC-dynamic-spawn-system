@@ -1,0 +1,337 @@
+local helper = dofile("/utils/global_helper")
+
+local spawnCoords = {
+    x = -640,
+    y = 32,
+    z = -289
+}
+local spawnRadius = 250
+
+local Chest = {
+    ressources = {
+        { x = -711, y = 37, z = -330 },{ x = -697, y = 29, z = -337 },{ x = -692, y = 32, z = -317 },{ x = -672, y = 32, z = -323 },{ x = -672, y = 27, z = -341 },
+        { x = -646, y = 34, z = -342 },{ x = -646, y = 34, z = -342 },{ x = -640, y = 27, z = -345 },{ x = -922, y = 31, z = -357 },{ x = -625, y = 27, z = -366 },{ x = -632, y = 44, z = -389 },
+        { x = -609, y = 42, z = -394 },{ x = -617, y = 32, z = -387 },{ x = -607, y = 27, z = -385 },{ x = -607, y = 25, z = -355 },{ x = -610, y = 26, z = -355 },
+        { x = -720, y = 35, z = -276 }, { x = -592, y = 27, z = -333 }, { x = -593, y = 32, z = -315 }, { x = -599, y = 32, z = -302 }, { x = -612, y = 27, z = -306 },
+        { x = -576, y = 32, z = -299 }, { x = -568, y = 27, z = -320 }, { x = -565, y = 32, z = -334 },{ x = -692, y = 32, z = -307 },{ x = -696, y = 32, z = -294 },{ x = -696, y = 32, z = -290 },{ x = -701, y = 32, z = -305 },
+        { x = -697, y = 44, z = -377 },{ x = -679, y = 38, z = -417 },{ x = -566, y = 35, z = -328 },{ x = -576, y = 32, z = -282 },{ x = -544, y = 27, z = -249 },
+        { x = -570, y = 32, z = -227 },{ x = -579, y = 37, z = -223 },{ x = -592, y = 27, z = -229 },{ x = -570, y = 37, z = -215 },{ x = -574, y = 36, z = -215 },{ x = -575916, y = 27, z = -213 },
+        { x = -630, y = 38, z = -213 },{ x = -623, y = 28, z = -217 },{ x = -661, y = 37, z = -217 },{ x = -648, y = 37, z = -229 },{ x = -647, y = 37, z = -229 },{ x = -667, y = 37, z = -242 },{ x = -646, y = 32, z = -243 },
+        { x = -639, y = 26, z = -258 },{ x = -622, y = 27, z = -253 },{ x = -623, y = 26, z = -257 },{ x = -690, y = 27, z = -280 },{ x = -676, y = 26, z = -276 },{ x = -603, y = 27, z = -272 },
+        { x = -599, y = 27, z = -280 },{ x = -605, y = 32, z = -271 },{ x = -581, y = 27, z = -283 },{ x = -562, y = 27, z = -328 },{ x = -592, y = 27, z = -363 },{ x = -632, y = 27, z = -397 },
+        { x = -699, y = 27, z = -378 },{ x = -711, y = 27, z = -199 },{ x = -648, y = 27, z = -221 },{ x = -561, y = 27, z = -278 },{ x = -572, y = 27, z = -302 },{ x = -602, y = 27, z = -299 },{ x = -648, y = 32, z = -304 },
+        { x = -671, y = 35, z = -304 },{ x = -673, y = 30, z = -262 },{ x = -678, y = 29, z = -258 },{ x = -630, y = 27, z = -326 },{ x = -596, y = 25, z = -293 },{ x = -601, y = 27, z = -263 },{ x = -614, y = 27, z = -318 },{ x = -552, y = 28, z = -276 },
+        { x = -631, y = 37, z = -325 },{ x = -679, y = 20, z = -333 },{ x = -669, y = 21, z = -335 },{ x = -693, y = 20, z = -314 },{ x = -645, y = 22, z = -244 },{ x = -667, y = 11, z = -347 },{ x = -686, y = 16, z = -294 },{ x = -750, y = 10, z = -339 },
+        { x = -617, y = 11, z = -341 },{ x = -623, y = 13, z = -390 },{ x = -521, y = 11, z = -326 },{ x = -594, y = 9, z = -192 },{ x = -545, y = 11, z = -232 },{ x = -582, y = 12, z = -151 },{ x = -642, y = 11, z = -157 },
+        { x = -642, y = 12, z = -158 },{ x = -684, y = 27, z = -225 },{ x = -695, y = 27, z = -261 },{ x = -685, y = 27, z = -211 },{ x = -739, y = 31, z = -213 },{ x = -710, y = 32, z = -251 },{ x = -690, y = 41, z = -217 }
+    },
+    quests = {
+        { x = -679, y = 49, z = -376, facing = "north" },{ x = -710, y = 42, z = -217, facing = "east" },{ x = -697, y = 42, z = -335, facing = "south" },
+        { x = -672, y = 27, z = -218, facing = "west" },{ x = -709, y = 42, z = -218, facing = "south" },{ x = -701, y = 42, z = -217, facing = "west" }    
+    }
+}
+
+local ChestItem = {
+    ["customnpcs:npcCoinWooden"] = "Piece en bois",
+    ["customnpcs:npcCoinStone"] = "Piece en pierre",
+    ["customnpcs:npcCoinIron"] = "Piece en fer",
+    ["customnpcs:npcCoinGold"] = "Piece en or",
+    ["customnpcs:npcCoinDiamond"] = "Piece en diamant",
+    ["minecraft:cooked_beef"] = "steak",
+    ["munition"] = "munition (9mm)",
+}
+
+local Muniton = {
+    ["munition"] = {
+        ["mw:Bullet762x39"] = "6%",
+        ["mw:Bullet357"] = "6%",
+        ["mw:BMG50"] = "18%",
+        ["mw:ShotgunShell"] = "18%",
+        ["mw:Bullet9mm"] = "22%",
+        ["mw:Magnum44Ammo"] = "6%",
+        ["mw:Bullet556x45"] = "18%",
+        ["mw:Bullet556x39"] = "6%",
+    }
+}
+
+
+local function askForChestType()
+    print("Quel type de coffre voulez-vous ?")
+    print("  1 - Coffre de ressources")
+    print("  2 - Coffre de quetes")
+
+    local chestType = tonumber(read())
+
+    if chestType ~= 1 and chestType ~= 2 then
+        print("Erreur: " .. chestType .. " n'est pas un type de coffre valide.")
+        return askForChestType()
+    end
+
+    if chestType == 1 then
+        return "ressources"
+    else
+        return "quests"
+    end
+end
+
+local function askForChestNumber(chestType)
+    ChestCount = 0
+    for key, value in pairs(Chest[chestType]) do
+        ChestCount = ChestCount + 1
+    end
+    print("Il y a " .. ChestCount .. " coffres de ce type disponible")
+    print("Combien de coffre voulez-vous ? en pourcentage ou en nombre")
+    local chestNumber = read()
+    local isPercentage = string.find(chestNumber, "%d+%%") ~= nil
+    if isPercentage then
+        chestNumber = string.gsub(chestNumber, "%%", "")
+        chestNumber = tonumber(chestNumber)
+        if chestNumber > 100 then
+            print("Erreur: " .. chestNumber .. " n'est pas un pourcentage valide.")
+            return askForChestNumber()
+        end
+        chestNumber = math.floor(ChestCount * chestNumber / 100)
+    else
+        chestNumber = tonumber(chestNumber)
+        if chestNumber > ChestCount then
+            print("Erreur: " .. chestNumber .. " n'est pas un nombre valide.")
+            return askForChestNumber()
+        end
+    end
+    return chestNumber
+end
+
+local function showChoiceItem()
+    print("  1 - Piece en bois")
+    print("  2 - Piece en pierre")
+    print("  3 - Piece en fer")
+    print("  4 - Piece en or")
+    print("  5 - Piece en diamant")
+    print("  6 - steak")
+    print("  7 - munition (9mm, 5.56mm, 7.62mm, 12.7mm)")
+end
+
+local function askForChestItem(SelectedChestItem)
+    SelectedChestItem = SelectedChestItem or {}
+    local chestItemChoice = 0
+    repeat
+        print("Quel item voulez-vous mettre dans le coffre ?")
+        showChoiceItem()
+        chestItemChoice = tonumber(read())
+        if chestItemChoice < 1 or chestItemChoice > 7 then
+            print("Erreur: " .. chestItem .. " n'est pas un item valide.")
+        end
+    until chestItemChoice >= 1 and chestItemChoice <= 7
+    
+    print( "Combien de cette item voulez-vous mettre dans le coffre ?")
+    print( "ex : 10 ou 10-20")
+    local chestItemCount = read()
+    local item = ""
+    if chestItemChoice == 1 then
+        item = "customnpcs:npcCoinWooden"
+    elseif chestItemChoice == 2 then
+        item = "customnpcs:npcCoinStone"
+    elseif chestItemChoice == 3 then
+        item = "customnpcs:npcCoinIron"
+    elseif chestItemChoice == 4 then
+        item = "customnpcs:npcCoinGold"
+    elseif chestItemChoice == 5 then
+        item = "customnpcs:npcCoinDiamond"
+    elseif chestItemChoice == 6 then
+        item = "minecraft:cooked_beef"
+    elseif chestItemChoice == 7 then
+        item = "munition"
+    end
+
+    SelectedChestItem[item] = chestItemCount
+
+    repeat
+        print("Que voulez-vous faire ?")
+        print("  1 - Ajouter un autre item")
+        print("  2 - Tout recommencer")
+        print("  3 - Continuer et générer les coffres")
+        local choice = tonumber(read())
+        if choice == 1 then
+            return askForChestItem(SelectedChestItem)
+        elseif choice == 2 then
+            return askForChestItem()
+        elseif choice == 3 then
+            return SelectedChestItem
+        else
+            print("Erreur: votre choix n'est pas un choix valide.")
+        end
+    until choice >= 1 and choice <= 3
+end
+
+table.shuffle = function(t)
+    local rand = math.random
+    assert(t, "table.shuffle() expected a table, got nil")
+    local iterations = helper.tablelength(t)
+    local j
+    for i = iterations, 2, -1 do
+        j = rand(i)
+        t[i], t[j] = t[j], t[i]
+    end
+    return t
+end
+
+table.slice = function(t, first, last, step)
+    local sliced = {}
+    for i = first or 1, last or helper.tablelength(t), step or 1 do
+        sliced[#sliced + 1] = t[i]
+    end
+    return sliced
+end
+
+local function createMunitionJSONPart(munition, count, i, usedSlot)
+    local isRange = string.find(count, "%d+-%d+") ~= nil
+    local realCount = 0
+    if isRange then
+        local min, max = string.match(count, "(%d+)-(%d+)")
+        min = tonumber(min)
+        max = tonumber(max)
+        realCount = math.random(min, max)
+    else
+        realCount = tonumber(count)
+    end
+    -- realMunition est la munition choisie au hasard
+    -- ex 18% d'avoir une BMG50 dans le slot i
+    local realMunition = ""
+    local random = math.random(1, 100)
+    local total = 0
+    for munition, chance in pairs(Muniton["munition"]) do
+        total = total + tonumber(string.match(chance, "(%d+)%%"))
+        if random <= total then
+            realMunition = munition
+            break
+        end
+    end
+
+    if realCount < 1 then
+        realCount = 1
+    end
+    local slot = math.random(0, 54)
+    while helper.isInArray(usedSlot, slot) do
+        slot = math.random(0, 54)
+    end
+    
+    return "{Slot:" .. slot .. ",id:" .. realMunition .. ",Count:" .. realCount .. "},"
+end
+
+local function createChestItemJSON(chestItem)
+    local chestItemJSON = "{Items:["
+    local i = 0
+    local usedSlot = {}
+    for item, count in pairs(chestItem) do
+        if item == "munition" then
+            chestItemJSON = chestItemJSON .. createMunitionJSONPart(munition,count,i,usedSlot)
+        else
+            local isRange = string.find(count, "%d+-%d+") ~= nil
+            local realCount = 0
+            if isRange then
+                local min, max = string.match(count, "(%d+)-(%d+)")
+                min = tonumber(min)
+                max = tonumber(max)
+                realCount = math.random(min, max)
+            else
+                realCount = tonumber(count)
+            end
+            if realCount < 1 then
+                realCount = 1
+            end
+            local slot = math.random(0, 54)
+            while helper.isInArray(usedSlot, slot) do
+                slot = math.random(0, 54)
+            end
+            chestItemJSON = chestItemJSON .. "{Slot:" .. slot .. ",id:" .. item .. ",Count:" .. realCount .. "},"
+        end
+        i = i + 1
+    end
+    chestItemJSON = string.sub(chestItemJSON, 1, -2)
+    chestItemJSON = chestItemJSON .. "]}"
+    return chestItemJSON
+end
+
+local function deleteAll()
+    -- kill item customnpcs:npcCoinWooden
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.npcCoinWooden]")
+    -- kill item customnpcs:npcCoinStone
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.npcCoinStone]")
+    -- kill item customnpcs:npcCoinIron
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.npcCoinIron]")
+    -- kill item customnpcs:npcCoinGold
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.npcCoinGold]")
+    -- kill item customnpcs:npcCoinDiamond
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.npcCoinDiamond]")
+    -- kill item steak
+    commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+            spawnRadius .. ",type=Item,name=item.item.beefCooked]")
+    -- kill item munition
+    for munition, chance in pairs(Muniton["munition"]) do
+        -- replace mw: by mw_
+        munition = string.gsub(munition, "mw:", "mw_")
+        commands.exec("/kill @e[x=" .. spawnCoords.x .. ",y=" .. spawnCoords.y .. ",z=" .. spawnCoords.z .. ",r=" ..
+                spawnRadius .. ",type=Item,name=item.item." .. munition .. "]")
+    end
+end
+
+local function placeChest(coords, chestItemJSON)
+    --"/setblock ~ ~ ~1 customnpcs:npcCrate 5 replace {Items:[{Slot:0,id:customnpcs:npcCoinStone,Count:3}]}""
+    commands.exec("/setblock " .. coords.x .. " " .. coords.y .. " " .. coords.z .. " customnpcs:npcCrate 5 replace " .. chestItemJSON)
+end
+
+local function resetAllChest(chestType)
+    for key, value in pairs(Chest[chestType]) do
+        placeChest(value, "{Items:[]}")
+    end
+    deleteAll()
+end
+
+local function generateChest(chestType, chestNumber, chestItem)
+    local coords = {}
+    if chestType == "ressources" then
+        coords = Chest[chestType]
+    else
+        coords = Chest[chestType]
+    end
+
+    -- filter coords with chestNumber
+    local isPercentage = string.find(chestNumber, "%d+%%") ~= nil
+    if isPercentage then
+        chestNumber = string.gsub(chestNumber, "%%", "")
+        chestNumber = tonumber(chestNumber)
+        coords = table.shuffle(coords)
+        local chestCount = math.floor(#coords * chestNumber / 100)
+        coords = table.slice(coords, 1, chestCount)
+    else
+        chestNumber = tonumber(chestNumber)
+        coords = table.shuffle(coords)
+        coords = table.slice(coords, 1, chestNumber)
+    end
+
+    resetAllChest(chestType)
+    -- generate chest
+    for key, value in pairs(coords) do
+        local chestItemJSON = createChestItemJSON(chestItem)
+        placeChest(value, chestItemJSON)
+    end
+end
+
+
+local function processSpawnChest()
+    local chestType = askForChestType()
+
+    local chestNumber = askForChestNumber(chestType)
+
+    local chestItem = askForChestItem()
+
+    generateChest(chestType, chestNumber, chestItem)
+end
+
+
+processSpawnChest()

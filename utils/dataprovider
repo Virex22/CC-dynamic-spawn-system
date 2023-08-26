@@ -1,4 +1,5 @@
 local enums = dofile("/utils/enums")
+local helper = dofile("/utils/global_helper")
 
 datas = {
 }
@@ -124,6 +125,40 @@ datas.ForestCoords = {
     { x = -569, y = 27, z = -199 }
 }
 
+datas.MineCoords = {
+    [0] = {{ x = -653, y = 11, z = -362 }, { x = -672, y = 11, z = -356 }, { x = -669, y = 11, z = -312 },
+    { x = -679, y = 11, z = -296 }, { x = -701, y = 11, z = -293 }, { x = -699, y = 11, z = -269 },
+    { x = -718, y = 11, z = -263 }, { x = -747, y = 12, z = -266 }, { x = -752, y = 11, z = -293 },
+    { x = -653, y = 11, z = -362 }, { x = -749, y = 11, z = -334 }, { x = -699, y = 11, z = -359 }, 
+    { x = -659, y = 11, z = -289 }, { x = -619, y = 11, z = -296 }, { x = -622, y = 11, z = -329 },
+    { x = -622, y = 11, z = -329 }, { x = -588, y = 11, z = -330 }, { x = -608, y = 11, z = -389 },
+    { x = -564, y = 11, z = -386 }, { x = -558, y = 11, z = -360 }, { x = -547, y = 11, z = -326 },
+    { x = -535, y = 11, z = -314 }, { x = -541, y = 11, z = -289 }, { x = -578, y = 11, z = -287 },
+    { x = -617, y = 11, z = -286 }, { x = -614, y = 11, z = -257 }, { x = -619, y = 11, z = -211 },
+    { x = -653, y = 11, z = -213 }, { x = -669, y = 11, z = -220 }, { x = -671, y = 11, z = -263 },
+    { x = -609, y = 11, z = -339 }, { x = -590, y = 11, z = -337 }, { x = -619, y = 11, z = -362 },
+    { x = -508, y = 11, z = -329 }, { x = -542, y = 11, z = -276 }, { x = -614, y = 11, z = -177 },
+    { x = -627, y = 11, z = -153 }, { x = -589, y = 11, z = -155 }, { x = -545, y = 11, z = -153 },
+    { x = -515, y = 11, z = -156 }, { x = -517, y = 11, z = -189 }, { x = -517, y = 11, z = -236 },
+    { x = -551, y = 11, z = -233 }, { x = -597, y = 11, z = -236 }, { x = -594, y = 11, z = -267 },
+    { x = -547, y = 11, z = -268 }, { x = -534, y = 11, z = -288 }},
+    [1] = {{ x = -512, y = 3, z = -272 }, { x = -510, y = 3, z = - 231}, { x = -498, y = 3, z = -228 },
+    { x = -457, y = 3, z = -226 }, { x = -444, y = 3, z = -211 }, { x = -447, y = 3, z = -179 },
+    { x = -414, y = 3, z = -179 }, { x = -403, y = 3, z = -191 }, { x = -401, y = 3, z = -224 },
+    { x = -403, y = 3, z = -262 }, { x = -428, y = 3, z = -259 }, { x = -448, y = 3, z = -261 },
+    { x = -447, y = 3, z = -273 }, { x = -444, y = 3, z = -294 }, { x = -423, y = 3, z = -291 },
+    { x = -416, y = 3, z = -302 }, { x = -426, y = 3, z = -304 }, { x = -448, y = 3, z = -306 },
+    { x = -479, y = 3, z = -312 }, { x = -482, y = 3, z = -349 }, { x = -460, y = 3, z = -350 },
+    { x = -435, y = 3, z = -349 }, { x = -400, y = 3, z = -349 }, { x = -402, y = 3, z = -323 },
+    { x = -482, y = 3, z = -288 }, { x = -480, y = 3, z = -258 }, { x = -501, y = 3, z = -306 },
+    { x = -538, y = 3, z = -304 }, { x = -558, y = 3, z = -307 }, { x = -556, y = 3, z = -330 },
+    { x = -557, y = 3, z = -352 }, { x = -555, y = 3, z = -284 }, { x = -557, y = 3, z = -263 },
+    { x = -573, y = 3, z = -273 }, { x = -610, y = 3, z = -276 }, { x = -619, y = 3, z = -256 },
+    { x = -616, y = 3, z = -211 }, { x = -595, y = 3, z = -210 }, { x = -546, y = 3, z = -209 },
+    { x = -509, y = 3, z = -213 }
+    }
+}
+
 -- tableau contient les coordonnées d'un batiment, avec potentiellement un nom
 -- un sous-tableau auras comme clé le numéro de l'étage, et comme valeur un tableau de coordonnées
 -- le rez-de-chaussé est l'étage 0
@@ -220,12 +255,137 @@ datas.InsideBuildingCoords = {
             [0] = { { x = -559, y = 27, z = -245 } },
             [1] = { { x = -557, y = 32, z = -243 }, { x = -561, y = 32, z = -246 } }
         }
+    },
+    {
+        data = {
+            [0] = { { x = -568, y = 27, z = -228 }},
+            [1] = { { x = -568, y = 32, z = -221 }}
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -568, y = 27, z = -213 }, { x = -582, y = 27, z = -213 } },
+            [1] = { { x = -568, y = 32, z = -213 }, { x = -575, y = 32, z = -212 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -607, y = 28, z = -213 },{ x = -594, y = 27, z = -213 },{ x = -600, y = 27, z = -213 } },
+            [1] = { { x = -601, y = 32, z = -213 }}
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -589, y = 27, z = -224 },{ x = -579, y = 27, z = -229 },{ x = -594, y = 27, z = -228 },{ x = -595, y = 27, z = -224 } },
+            [1] = { { x = -595, y = 32, z = -224 }, { x = -579, y = 32, z = -227 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -623, y = 27, z = -228 },{ x = -637, y = 27, z = -229 }},
+            [1] = { { x = -622, y = 32, z = -228 }}
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -626, y = 27, z = -214 },{ x = -622, y = 27, z = -214 },{ x = -633, y = 27, z = -212 },{ x = -634, y = 27, z = -219 } },
+            [1] = { { x = -628, y = 32, z = -212 }, { x = -625, y = 32, z = -216 } , { x = -634, y = 32, z = -215 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -642, y = 27, z = -212 },{ x = -648, y = 27, z = -212 },{ x = -655, y = 27, z = -212 },{ x = -661, y = 27, z = -213 }},-- gourer
+            [1] = { { x = -661, y = 32, z = -213 }, { x = -655, y = 32, z = -212 }, { x = -654, y = 32, z = -217 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -644, y = 27, z = -230 },{ x = -644, y = 27, z = -227 },{ x = -660, y = 27, z = -228 },{ x = -650, y = 27, z = -229 } },
+            [1] = { { x = -661, y = 32, z = -228 }, { x = -653, y = 32, z = -228 }, { x = -649, y = 32, z = -230 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -644, y = 27, z = -259 },{ x = -650, y = 27, z = -258 },{ x = -642, y = 27, z = -254 },{ x = -638, y = 27, z = -259 },{ x = -644, y = 27, z = -244 },{ x = -644, y = 27, z = -243 },{ x = -636, y = 27, z = -243 },{ x = -647, y = 27, z = -251 }},
+            [1] = { { x = -649, y = 32, z = -246 }, { x = -641, y = 32, z = -243 }, { x = -636, y = 32, z = -247 }, { x = -644, y = 32, z = -248 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -662, y = 27, z = -249 },{ x = -662, y = 27, z = -242 },{ x = -668, y = 27, z = -242 }, { x = -668, y = 27, z = -250 } },
+            [1] = { { x = -670, y = 32, z = -248 }, { x = -662, y = 32, z = -248 }, { x = -662, y = 32, z = -249 }, { x = -667, y = 32, z = -244 } }
+        }
+    },
+    {
+        name = enums.Zones.Bandithouse,
+        data = {
+            [0] = { { x = -676, y = 27, z = -221 },{ x = -676, y = 27, z = -220 },{ x = -677, y = 27, z = -212 },{ x = -677, y = 27, z = -215 },{ x = -675, y = 27, z = -212 },{ x = -675, y = 27, z = -215 },{ x = -673, y = 27, z = -212 },
+                { x = -679, y = 27, z = -217 },{ x = -685, y = 27, z = -212 },{ x = -681, y = 27, z = -213 },{ x = -682, y = 27, z = -221 },{ x = -684, y = 27, z = -221 },{ x = -686, y = 27, z = -221 },
+                { x = -692, y = 27, z = -222 } ,{ x = -692, y = 27, z = -213 } ,{ x = -679, y = 27, z = -217 } ,{ x = -707, y = 27, z = -211 },{ x = -705, y = 27, z = -216 },{ x = -708, y = 27, z = -216 },{ x = -699, y = 28, z = -216 },
+                { x = -706, y = 27, z = -232 },{ x = -709, y = 27, z = -238 },{ x = -706, y = 27, z = -246 },{ x = -709, y = 27, z = -246 },{ x = -706, y = 27, z = -258 },{ x = -701, y = 27, z = -259 },{ x = -702, y = 27, z = -257 },{ x = -699, y = 27, z = -257 },{ x = -697, y = 27, z = -259 },
+                { x = -694, y = 27, z = -259 },{ x = -691, y = 27, z = -255 },{ x = -691, y = 27, z = -249 },{ x = -697, y = 27, z = -249 },{ x = -699, y = 27, z = -252 },{ x = -702, y = 27, z = -243 },{ x = -702, y = 27, z = -257 },{ x = -700, y = 27, z = -235 },{ x = -699, y = 27, z = -222 },{ x = -691, y = 27, z = -230 },
+                { x = -696, y = 27, z = -230 },{ x = -696, y = 27, z = -226 },{ x = -685, y = 27, z = -226 },{ x = -682, y = 27, z = -230 },{ x = -691, y = 27, z = -243 },{ x = -683, y = 27, z = -216 },{ x = -683, y = 27, z = -218 }
+            },
+            [1] = { { x = -696, y = 32, z = -232 }, { x = -694, y = 32, z = -234 }, { x = -690, y = 32, z = -236 } , { x = -692, y = 32, z = -243 }, { x = -694, y = 32, z = -250 }, { x = -695, y = 32, z = -242 }, { x = -696, y = 32, z = -247 },
+                { x = -701, y = 32, z = -246 },{ x = -703, y = 32, z = -239 },{ x = -708, y = 32, z = -240 },{ x = -709, y = 32, z = -233 },{ x = -701, y = 32, z = -233 },{ x = -701, y = 32, z = -225 },{ x = -709, y = 32, z = -225 },{ x = -701, y = 32, z = -218 },{ x = -703, y = 32, z = -216 },
+                { x = -710, y = 32, z = -218 },{ x = -709, y = 32, z = -215 },{ x = -697, y = 32, z = -221 },{ x = -691, y = 32, z = -217 },{ x = -691, y = 33, z = -214 },{ x = -700, y = 32, z = -214 }
+            },
+            [2] = {{ x = -702, y = 37, z = -214 },{ x = -699, y = 37, z = -214 },{ x = -699, y = 37, z = -226 },{ x = -702, y = 37, z = -238 },{ x = -705, y = 37, z = -228 },{ x = -709, y = 37, z = -240 },{ x = -694, y = 37, z = -238 },{ x = -691, y = 37, z = -234 },{ x = -691, y = 37, z = -229 },
+                { x = -695, y = 37, z = -222 },{ x = -691, y = 37, z = -212 },{ x = -693, y = 37, z = -211 },{ x = -709, y = 37, z = -216 },{ x = -705, y = 37, z = -219 },{ x = -706, y = 38, z = -223 },{ x = -695, y = 38, z = -216 },{ x = -695, y = 38, z = -213 }
+            },
+            [3] = {
+                { x = -709, y = 40, z = -212 },{ x = -709, y = 42, z = -214 },{ x = -710, y = 42, z = -216 },{ x = -706, y = 42, z = -216 },{ x = -707, y = 42, z = -215 },{ x = -706, y = 42, z = -214 },{ x = -705, y = 42, z = -213 },{ x = -702, y = 42, z = -214 },{ x = -705, y = 42, z = -215 },
+            }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -692, y = 27, z = -273 },{ x = -696, y = 27, z = -277 },{ x = -708, y = 27, z = -272 },{ x = -699, y = 27, z = -273 }},
+            [1] = { { x = -696, y = 32, z = -275 }, { x = -703, y = 32, z = -276 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -673, y = 27, z = -283 },{ x = -671, y = 27, z = -272 }}
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -697, y = 27, z = -290 },{ x = -700, y = 27, z = -294 },{ x = -692, y = 27, z = -291 },{ x = -692, y = 27, z = -305 },{ x = -694, y = 20, z = -317 },{ x = -700, y = 20, z = -317 },{ x = -698, y = 20, z = -312 }},
+            [1] = { { x = -694, y = 32, z = -294 }, { x = -699, y = 32, z = -294 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -702, y = 27, z = -305 },{ x = -702, y = 27, z = -304 },{ x = -709, y = 27, z = -296 },{ x = -708, y = 28, z = -290 },{ x = -708, y = 27, z = -304 }},
+            [1] = { { x = -703, y = 32, z = -303 }, { x = -707, y = 32, z = -304 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -709, y = 27, z = -318 },{ x = -701, y = 27, z = -316 },{ x = -710, y = 27, z = -326 },{ x = -708, y = 28, z = -343 }},
+            [1] = { { x = -710, y = 32, z = -339 }, { x = -708, y = 32, z = -324 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -696, y = 27, z = -325 },{ x = -695, y = 27, z = -326 },{ x = -692, y = 28, z = -319 },{ x = -691, y = 27, z = -330 },{ x = -696, y = 27, z = -344 },{ x = -681, y = 20, z = -342 },{ x = -675, y = 20, z = -347 },{ x = -674, y = 20, z = -352 },{ x = -667, y = 20, z = -351 },{ x = -668, y = 20, z = -343 },{ x = -668, y = 20, z = -337 },{ x = -673, y = 20, z = -335 },{ x = -667, y = 20, z = -334 },{ x = -676, y = 20, z = -339 }},
+            [1] = { { x = -693, y = 32, z = -325 }, { x = -691, y = 33, z = -334 }, { x = -691, y = 33, z = -339 } }
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -701, y = 27, z = -336 }},
+            [1] = { { x = -698, y = 32, z = -335 }, { x = -704, y = 33, z = -334 }},
+            [2] = { { x = -703, y = 35, z = -337 }, { x = -699, y = 37, z = -333 }, { x = -699, y = 37, z = -336 }}
+        }
+    },
+    {
+        data = {
+            [0] = { { x = -678, y = 27, z = -326 },{ x = -673, y = 27, z = -330 },{ x = -673, y = 27, z = -326 },{ x = -674, y = 27, z = -321 },{ x = -678, y = 27, z = -318 },{ x = -678, y = 27, z = -338 },{ x = -672, y = 28, z = -338 },{ x = -674, y = 27, z = -334 }},
+            [1] = { { x = -674, y = 32, z = -338 }, { x = -678, y = 32, z = -329 }, { x = -680, y = 32, z = -325 }, { x = -675, y = 32, z = -318 }, { x = -674, y = 32, z = -319 } }
+        }
     }
-    -- progress here
-    -- {data={
-    --     [0] = {{x = -0,y = 27,z = -0},},
-    --     [1] = {},
-    -- }},
 }
 
 function getAllCoords()
@@ -251,17 +411,97 @@ function getAllCoords()
             end
         end
     end
-    return coords
-end
-
-function coordsNow()
-    local coords = {}
-    for _, v in pairs(datas.InsideBuildingCoords) do
-        for _, v2 in pairs(v.data) do
-            for _, v3 in pairs(v2) do
-                table.insert(coords, v3)
-            end
+    for _, v in pairs(datas.MineCoords) do
+        for _, v2 in pairs(v) do
+            table.insert(coords, v2)
         end
     end
     return coords
+end
+function getDebugCoords()
+    return getAllCoords()
+end
+function getBuildCoords(buildName)
+    coords = {}
+    for _, v in pairs(datas.InsideBuildingCoords) do
+        if v.name == buildName then
+            for _, v2 in pairs(v.data) do
+                for _, v3 in pairs(v2) do
+                    table.insert(coords, v3)
+                end
+            end
+        end
+    end
+
+    for _, v in pairs(datas.RooftopCoords) do
+        if v.name == buildName then
+            for _, v2 in pairs(v.data) do
+                table.insert(coords, v2)
+            end
+        end
+    end
+
+    return coords
+end
+
+function getCoordsByZone(zone)
+    local coords = {}
+    zoneExist = helper.isInArray(enums.Zones, zone, true)
+    if not zoneExist then
+        error("getCoordsByZone: zone invalide")
+        return nil
+    end
+    zoneId = enums.Zones[zone]
+
+    zoneList = {}
+    for k, v in pairs(enums.Zones) do
+       zoneList[v] = k
+    end
+
+    if zoneList[zoneId] == nil then
+        print("getCoordsByZone: zone invalide")
+        return nil
+    end
+    
+    if zoneId == 0 then
+        local coords = {}
+        for _, v in pairs(datas.RooftopCoords) do
+            for _, v2 in pairs(v.data) do
+                table.insert(coords, v2)
+            end
+        end
+        return coords
+    elseif zoneId == 1 then
+        return datas.TowerCoords
+    elseif zoneId == 2 then
+        return getBuildCoords(enums.Zones.Prison)
+    elseif zoneId == 3 then
+        coords = getBuildCoords(enums.Zones.Mine)
+        for _, v in pairs(datas.MineCoords) do
+            table.insert(coords, v)
+        end
+        return coords
+    elseif zoneId == 4 then
+        return getBuildCoords(enums.Zones.Warehouse)
+    elseif zoneId == 5 then
+        return getBuildCoords(enums.Zones.Bandithouse)
+    elseif zoneId == 6 then
+        return getBuildCoords(enums.Zones.Church)
+    elseif zoneId == 7 then
+        return datas.ForestCoords
+    elseif zoneId == 8 then
+        return datas.RoadCoords
+    elseif zoneId == 9 then
+        local coords = {}
+        for _, v in pairs(datas.InsideBuildingCoords) do
+            for _, v2 in pairs(v.data) do
+                for _, v3 in pairs(v2) do
+                    table.insert(coords, v3)
+                end
+            end
+        end
+        return coords
+    elseif zoneId == 10 then
+        return getAllCoords()
+    end
 end

@@ -1,0 +1,14 @@
+local store = dofile("/utils/store")
+local env = _ENV
+
+local subCommand = env.args[2]
+
+if subCommand == nil then
+    print("Reset commands reset all your settings to their default values.")
+    print("Usage: reset --force")
+elseif subCommand == "--force" then
+    store.reset()
+else
+    print("Invalid subcommand:", subCommand)
+    print("Usage: reset [--force]")
+end

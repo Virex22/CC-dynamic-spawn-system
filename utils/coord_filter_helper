@@ -1,10 +1,30 @@
+function tablelength(T)
+    local count = 0
+    for _ in pairs(T) do
+        count = count + 1
+    end
+    return count
+end
 -- get a percentage of coords from a table of coords
 function filterPercentageOfCoords(coords, percentage)
     local filteredCoords = {}
-    local totalCoords = #coords
-    local filteredCoordsCount = math.floor(totalCoords * percentage)
+    local totalCoords = tablelength(coords)
+    local filteredCoordsCount = math.ceil(totalCoords * (percentage / 100))
     for i = 1, filteredCoordsCount do
-        local randomIndex = math.random(1, #coords)
+        local randomIndex = math.random(1, tablelength(coords))
+        table.insert(filteredCoords, coords[randomIndex])
+        table.remove(coords, randomIndex)
+    end
+    return filteredCoords
+end
+
+-- get a number of coords from a table of coords
+function filterCountOfCoords(coords, count)
+    local filteredCoords = {}
+    local totalCoords = tablelength(coords)
+    local filteredCoordsCount = math.min(count, totalCoords)
+    for i = 1, filteredCoordsCount do
+        local randomIndex = math.random(1, tablelength(coords))
         table.insert(filteredCoords, coords[randomIndex])
         table.remove(coords, randomIndex)
     end
@@ -14,9 +34,9 @@ end
 -- filter coords by distance from a center of a circle, if the coord isn't in the circle, it's not added to the result
 function filterCoordsByDistance(coords, centerOfCircle, radius)
     local filteredCoords = {}
-    for i = 1, #coords do
+    for i = 1, tablelength(coords) do
         local coord = coords[i]
-        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        local distance = math.sqrt((coord.x - centerOfCircle.x) ^ 2 + (coord.z - centerOfCircle.z) ^ 2)
         if distance <= radius then
             table.insert(filteredCoords, coord)
         end
@@ -27,11 +47,12 @@ end
 -- filter coords by distance from a center of a circle, get percentage of coords in function of the distance from the center
 function filterCoordsByDistanceSmooth(coords, centerOfCircle, radius, PercentageCenter, PercentageExtremity)
     local filteredCoords = {}
-    for i = 1, #coords do
+    for i = 1, tablelength(coords) do
         local coord = coords[i]
-        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        local distance = math.sqrt((coord.x - centerOfCircle.x) ^ 2 + (coord.z - centerOfCircle.z) ^ 2)
         if distance <= radius then
-            local percentage = PercentageCenter + (PercentageExtremity - PercentageCenter) * (distance / radius)
+            local percentage = (PercentageCenter / 100) + ((PercentageExtremity / 100) - (PercentageCenter / 100)) *
+                                   (distance / radius)
             if math.random() <= percentage then
                 table.insert(filteredCoords, coord)
             end
@@ -44,7 +65,7 @@ end
 function filterCoordsByNumber(coords, number)
     local filteredCoords = {}
     for i = 1, number do
-        local randomIndex = math.random(1, #coords)
+        local randomIndex = math.random(1, tablelength(coords))
         table.insert(filteredCoords, coords[randomIndex])
         table.remove(coords, randomIndex)
     end
@@ -54,17 +75,17 @@ end
 -- filter by number of coords and make sure the coords is homogenous
 function filterCoordsByNumberHomogenous(coords, number)
     local filteredCoords = {}
-    local coordsPerType = math.floor(number / #coords)
-    for i = 1, #coords do
+    local coordsPerType = math.floor(number / tablelength(coords))
+    for i = 1, tablelength(coords) do
         local coordsForType = filterCoordsByNumber(coords[i], coordsPerType)
-        for j = 1, #coordsForType do
+        for j = 1, tablelength(coordsForType) do
             table.insert(filteredCoords, coordsForType[j])
         end
     end
     local remainingCoords = number - #filteredCoords
     if remainingCoords > 0 then
         local coordsForType = filterCoordsByNumber(coords[1], remainingCoords)
-        for j = 1, #coordsForType do
+        for j = 1, tablelength(coordsForType) do
             table.insert(filteredCoords, coordsForType[j])
         end
     end
@@ -74,9 +95,9 @@ end
 -- inverted circle coords, remove coords in a circle
 function filterCoordsByDistanceInverted(coords, centerOfCircle, radius)
     local filteredCoords = {}
-    for i = 1, #coords do
+    for i = 1, tablelength(coords) do
         local coord = coords[i]
-        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        local distance = math.sqrt((coord.x - centerOfCircle.x) ^ 2 + (coord.z - centerOfCircle.z) ^ 2)
         if distance > radius then
             table.insert(filteredCoords, coord)
         end
@@ -85,13 +106,16 @@ function filterCoordsByDistanceInverted(coords, centerOfCircle, radius)
 end
 
 -- filter coords by distance from a center of a circle, get percentage of coords in function of the distance from the center
-function filterCoordsByDistanceSmoothInverted(coords, centerOfCircle, radius, PercentageLessOnTheCircle, PercentageMoreOnTheCircle)
+function filterCoordsByDistanceSmoothInverted(coords, centerOfCircle, radius, PercentageLessOnTheCircle,
+    PercentageMoreOnTheCircle)
     local filteredCoords = {}
-    for i = 1, #coords do
+    for i = 1, tablelength(coords) do
         local coord = coords[i]
-        local distance = math.sqrt((coord.x - centerOfCircle.x)^2 + (coord.z - centerOfCircle.z)^2)
+        local distance = math.sqrt((coord.x - centerOfCircle.x) ^ 2 + (coord.z - centerOfCircle.z) ^ 2)
         if distance > radius then
-            local percentage = PercentageLessOnTheCircle + (PercentageMoreOnTheCircle - PercentageLessOnTheCircle) * (distance / radius)
+            local percentage = (PercentageLessOnTheCircle / 100) +
+                                   ((PercentageMoreOnTheCircle / 100) - (PercentageLessOnTheCircle / 100)) *
+                                   (distance / radius)
             if math.random() <= percentage then
                 table.insert(filteredCoords, coord)
             end
@@ -99,3 +123,14 @@ function filterCoordsByDistanceSmoothInverted(coords, centerOfCircle, radius, Pe
     end
     return filteredCoords
 end
+
+return {
+    filterPercentageOfCoords = filterPercentageOfCoords,
+    filterCoordsByDistance = filterCoordsByDistance,
+    filterCoordsByDistanceSmooth = filterCoordsByDistanceSmooth,
+    filterCoordsByNumber = filterCoordsByNumber,
+    filterCoordsByNumberHomogenous = filterCoordsByNumberHomogenous,
+    filterCoordsByDistanceInverted = filterCoordsByDistanceInverted,
+    filterCoordsByDistanceSmoothInverted = filterCoordsByDistanceSmoothInverted,
+    filterCountOfCoords = filterCountOfCoords
+}
